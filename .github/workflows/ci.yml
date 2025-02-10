@@ -6,9 +6,6 @@ on:
       - master
       - main
   pull_request:
-    branches:
-      - master
-      - main
 
 permissions: read-all
 
@@ -29,23 +26,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Check types
-        run: npm run typecheck
+        run: yarn run typecheck
       - name: Lint
-        run: npm run lint
+        run: yarn run lint
       - name: Unit tests
-        run: npm run test:ci
+        run: yarn run test:ci
       - name: Build frontend
         run: |
           if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            npm run build -- --profile --json stats.json
+            yarn run build -- --profile --json stats.json
           else
-            npm run build
+            yarn run build
           fi
 
       - name: Check for backend
@@ -85,7 +82,7 @@ jobs:
           fi
 
       - name: Sign plugin
-        run: npm run sign
+        run: yarn run sign
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
@@ -170,10 +167,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install dev dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Start Grafana
         run: |
@@ -184,11 +181,11 @@ jobs:
         uses: grafana/plugin-actions/wait-for-grafana@main
 
       - name: Install Playwright Browsers
-        run: npm exec playwright install chromium --with-deps
+        run: yarn exec playwright install chromium --with-deps
 
       - name: Run Playwright tests
         id: run-tests
-        run: npm run e2e
+        run: yarn run e2e
 
       - name: Docker logs
         if: ${{ always() && steps.run-tests.outcome == 'failure' }}
