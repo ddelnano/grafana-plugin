@@ -2,7 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "transpileOnly": true,
   "transpiler": "ts-node/transpilers/swc-experimental"
